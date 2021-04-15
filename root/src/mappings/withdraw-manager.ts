@@ -50,7 +50,7 @@ export function handleExitCancelled(event: ExitCancelled): void {
   let entity = PlasmaExit.load(id)
   if (entity == null) {
     entity = new PlasmaExit(id)
-
+    entity.counter = BigInt.fromI32(0)
     entity.isRegularExit = true
     entity.exited = 1
   }
@@ -75,7 +75,7 @@ export function handleWithdraw(event: Withdraw): void {
   let entity = PlasmaExit.load(id)
   if (entity == null) {
     entity = new PlasmaExit(id)
-
+    entity.counter = BigInt.fromI32(0)
     entity.isRegularExit = true
     entity.exited = 2
   }
