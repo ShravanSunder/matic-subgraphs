@@ -17,6 +17,8 @@ function getGlobalPlasmaExitCounter(): GlobalPlasmaExitCounter {
 
 export function handleExitStarted(event: ExitStarted): void {
   let id = 'plasma-exit-' + event.params.exitId.toHexString()
+  // this is first time this entity being created i.e. during plasma
+  let entity = new PlasmaExit(id)
 
   // Try to get what's current global plasma counter's state
   // when called for very first time, it'll be `0`
@@ -27,10 +29,7 @@ export function handleExitStarted(event: ExitStarted): void {
   counter.current = updated
   counter.save()
   
-  // this is first time this entity being created i.e. during plasma
   // exit start step
-  let entity = new PlasmaExit(id)
-  entity.counter = updated
   entity.exitId = event.params.exitId
   entity.exitInitiator = event.params.exitor
   entity.token = event.params.token
@@ -40,7 +39,7 @@ export function handleExitStarted(event: ExitStarted): void {
   entity.exited = 0
   entity.exitStartedTxHash = event.transaction.hash
   entity.exitStartedTimeStamp = event.block.timestamp
-
+  entity.counter = updated
   // save entity
   entity.save()
 }
