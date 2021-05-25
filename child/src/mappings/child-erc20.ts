@@ -1,4 +1,4 @@
-import { LogTransfer, Withdraw } from '../../generated/ChildERC20/ChildERC20'
+import { Deposit, LogTransfer, Withdraw } from '../../generated/ChildERC20/ChildERC20'
 import { TransactionEntity } from '../../generated/schema'
 import { toDecimal } from '../helpers/numbers'
 
@@ -34,6 +34,21 @@ export function handleWithdraw(event: Withdraw): void {
   transactionEntity.transaction = event.transaction.hash
   transactionEntity.token = event.address
   transactionEntity.type = 'withdraw'
+
+  transactionEntity.save()
+}
+
+export function handleDeposit(event: Deposit): void {
+  let transactionEntity = new TransactionEntity(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-deposit')
+
+  transactionEntity.from = event.params.from
+  transactionEntity.to = null
+  transactionEntity.value = toDecimal(event.params.amount, 18)
+  transactionEntity.block = event.block.number
+  transactionEntity.timestamp = event.block.timestamp
+  transactionEntity.transaction = event.transaction.hash
+  transactionEntity.token = event.address
+  transactionEntity.type = 'deposit'
 
   transactionEntity.save()
 }

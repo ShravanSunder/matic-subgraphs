@@ -4,7 +4,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: ChildERC20
-    network: {{network}}
+    network: { { network } }
     source:
       abi: ChildERC20
     mapping:
@@ -22,3 +22,5 @@ dataSources:
           handler: handleLogTransfer
         - event: Withdraw(indexed address,indexed address,uint256,uint256,uint256)
           handler: handleWithdraw
+        - event: Deposit(indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleDeposit
